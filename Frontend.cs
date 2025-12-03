@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Threading.Tasks;
 using EnergyUsageManager; 
 
 // I originally wrote EnergyUsageManager in a separate project than the Frontend.css program. The backend code would be compiled into a .dll class library,
@@ -41,6 +43,26 @@ namespace EnergyUsageManager.Test
             // write a horizontal line & newline to visually separate data
             WriteHorizontalLine();
             Console.WriteLine();
+        }
+
+        public static async void StartTimeDrawer()
+        {
+            while (true)
+            {
+                // wait
+                await Task.Delay(15 * 1000); // every 15 seconds (15*1000 milliseconds)
+
+                // get file data before writing anything so there's less chance of main rendering from being interrupted
+                string dateText = MonthTicker.Month + ", " + MonthTicker.Year + "      "; // extra space at end for clearing last text
+
+                int[] originalCursorPos = new[] {Console.CursorLeft, Console.CursorTop}; // save current position
+                
+                // update date text
+                Console.SetCursorPosition(0, 0);
+                Console.Write(dateText); 
+
+                Console.SetCursorPosition(originalCursorPos[0], originalCursorPos[1]); // go back to current position
+            }
         }
 
         // Prompting Methods //
@@ -259,7 +281,9 @@ namespace EnergyUsageManager.Test
             MonthTicker.Begin(2); // begins a loop that ticks the months every 2 minutes
             // rest of code still progresses because the task that handles the loop is asynchronous from the UI.
 
-            MainMenu();
+            StartTimeDrawer(); // also an async function
+
+            MainMenu(); // finally go to main menu
         }
 
         // Screens //
@@ -363,7 +387,7 @@ namespace EnergyUsageManager.Test
                 if (user.OwnedUnit != null)
                     options.Add("Delete my unit");
 
-                options.Add("Assign myself to an existing unit");
+                if (user.Type == UserManager.UserType.Renter) options.Add("Assign myself to an existing unit");
                 options.Add("Add money to my account");
                 options.Add("Pay bill");
                 options.Add("Logout");
