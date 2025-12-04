@@ -1,12 +1,12 @@
-﻿using System;
+﻿using EnergyUsageManager; 
+using System;
 using System.Data;
 using System.Threading.Tasks;
-using EnergyUsageManager; 
-
 // I originally wrote EnergyUsageManager in a separate project than the Frontend.css program. The backend code would be compiled into a .dll class library,
 // but because that made it hard to set up the project on each group members computer, I decided to just include it as a folder in one big console-app project.
 
 using static EnergyUsageManager.Test.Render;
+using static EnergyUsageManager.UserManager;
 
 namespace EnergyUsageManager.Test
 {
@@ -250,7 +250,6 @@ namespace EnergyUsageManager.Test
             // return index (zero-based; hence the "- 1") that the user chooses
             // (this method automatically handles type & range validation)
             return PromptForInt("Choose an item", new[] { 1, options.Length }) - 1;
-
         }
 
     }
@@ -259,6 +258,7 @@ namespace EnergyUsageManager.Test
     {
         // Runtime Global Vars //
         internal static int? MySessionID = null;
+        private const string AdminPassword = "enter password here"; /// default admin password
 
         internal static UserManager.User? CurrentUser
         {
@@ -278,6 +278,9 @@ namespace EnergyUsageManager.Test
         // Entry-Point //
         public static void Main(string[] args)
         {
+            // create admin account with password const if there's no admin account
+            if (!UserDB.ContainsFieldValue("userType","admin")) TryCreateAdminAccount("admin", AdminPassword);
+
             MonthTicker.Begin(2); // begins a loop that ticks the months every 2 minutes
             // rest of code still progresses because the task that handles the loop is asynchronous from the UI.
 
@@ -305,6 +308,7 @@ namespace EnergyUsageManager.Test
         public static void LoginScreen()
         {
             Console.Clear();
+            Render.WriteHeader();
             Console.WriteLine("Login screen\n\n");
 
             string uname = Prompt("Username");
@@ -324,6 +328,7 @@ namespace EnergyUsageManager.Test
         public static void SignupScreen()
         {
             Console.Clear();
+            Render.WriteHeader();
             Console.WriteLine("Account creation screen\n\n");
 
             string uname = Prompt("Username");

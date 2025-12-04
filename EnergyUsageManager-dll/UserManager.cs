@@ -30,8 +30,6 @@ namespace EnergyUsageManager
         private static Random Randomness { get => new Random(System.Environment.TickCount); } // mostly unique seed for extra security
         internal static CSVDataBase UserDB;
 
-        private const string AdminPassword = "password";
-
         /// Classes ///
         
         public class User
@@ -399,7 +397,6 @@ namespace EnergyUsageManager
                 "users"
                 );
 
-            if (UserDB.GetEntriesByFieldValue("username", "admin").Length == 0) TryCreateAdminAccount("admin", AdminPassword);
         }
 
         /// Account Creation Methods ///
