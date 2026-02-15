@@ -4,7 +4,7 @@ disincentivizes overconsumption of energy which could put a strain on power line
 if they're a homeowner, or their apartment building's units if they're a building manager. These units are all billed
 monthly based on power consumption. If the power usage goes over a certain threshold, they are billed at a higher rate.
 These variables: energy price per kWh, overusage threshold, & overuse energy price per kWh are all managed by the 
-administrator, who's account is registered automatically in Frontend.cs. A .csv report is generated each month detailing 
+administrator. A .csv report is generated each month detailing 
 the energy usage, whether the unit went over their threshold for energy usage, and the resulting bill.
 
 This project is divided into two parts, the backend API & the frontend console application. The API is a class library 
